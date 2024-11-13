@@ -167,7 +167,10 @@ public:
 };
 
 int main() {
-	
+    Biblioteca biblioteca;
+    int opcao;
+    
+    biblioteca.menu();
     return 0;
 }
 
