@@ -53,11 +53,13 @@ protected:
 public:
     Livro(int id, string titulo, int ano, string autor, string genero) : ItemBiblioteca(id, titulo, ano), autor(autor), genero(genero) {};      
     void exibirDetalhes() override{
-        cout << "ID: " << id << endl;
-        cout << "Titulo: " << titulo << endl;
-        cout << "Ano: " << ano << endl;
-        cout << "Autor: " << autor << endl;
-        cout << "Genero: " << genero << endl;
+        cout << "------------------------------" << endl;
+
+        cout << "ID:         " << id << endl;
+        cout << "Titulo:     " << titulo << endl;
+        cout << "Ano:        " << ano << endl;
+        cout << "Autor:      " << autor << endl;
+        cout << "Genero:     " << genero << endl;
         cout << "Emprestado: " << emprestado << endl;
     };
 };
@@ -112,10 +114,14 @@ class Biblioteca {
     vector<Professor> professores;
 
 public:
-    void adicionarLivro(int id,string titulo,int ano,string autor,string genero){
+    void adicionarLivro(int id, string titulo, int ano, string autor, string genero){
         Livro livro(id, titulo, ano, autor, genero);
         livros.push_back(livro);
+
+        cout << "------------------------------" << endl;
+        cout << "Livro cadastrado com sucesso! - "<< endl << titulo << endl;
     };
+
     void listarLivros(){
         for(auto livro : livros){
             livro.exibirDetalhes();
@@ -131,6 +137,7 @@ public:
             professores.push_back(professor);
         }
     };
+
     void listarUsuarios(){
         for(auto aluno : alunos){
             aluno.exibirUsuario();
@@ -139,6 +146,7 @@ public:
             professor.exibirUsuario();
         }
     };
+
     void emprestarLivro(int idLivro, int idUsuario,char tipo){
         if(tipo == 'A'){
             alunos[idUsuario].realizarEmprestimo();
@@ -147,6 +155,7 @@ public:
         }
         livros[idLivro].emprestar();
     };
+
     void devolverLivro(int idLivro, int idUsuario,char tipo){
         if(tipo == 'A'){
             alunos[idUsuario].realizarDevolucao();
@@ -155,6 +164,7 @@ public:
         }
         livros[idLivro].devolver();
     };
+
     void menu(){
         cout << "------------------------------" << endl;
         cout << "1 - Adicionar Livro" << endl;
@@ -171,6 +181,11 @@ public:
 int main() {
 
     Biblioteca biblioteca;
+    biblioteca.adicionarLivro(1, "O Senhor dos Anéis", 1954, "J.R.R. Tolkien", "Fantasia");
+    biblioteca.adicionarLivro(2, "Harry Potter", 1997, "J.K. Rowling", "Fantasia");
+    biblioteca.adicionarLivro(3, "O Pequeno Príncipe", 1943, "Antoine de Saint-Exupéry", "Infantil");
+    biblioteca.adicionarLivro(4, "Dom Quixote", 1605, "Miguel de Cervantes", "Aventura");
+
     int opcao;
 	
     while (true) {
@@ -188,7 +203,8 @@ int main() {
                 break;
 
             case 2:
-                cout << "opção 2" << endl;
+                cout << "-=- Listagem de Livros -=-" << endl;
+                biblioteca.listarLivros();
                 break;
 
             case 3:
