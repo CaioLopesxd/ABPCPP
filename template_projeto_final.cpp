@@ -156,6 +156,7 @@ public:
         livros[idLivro].devolver();
     };
     void menu(){
+        cout << "------------------------------" << endl;
         cout << "1 - Adicionar Livro" << endl;
         cout << "2 - Listar Livros" << endl;
         cout << "3 - Adicionar Usuario" << endl;
@@ -163,12 +164,54 @@ public:
         cout << "5 - Emprestar Livro" << endl;
         cout << "6 - Devolver Livro" << endl;
         cout << "0 - Sair" << endl;
+        cout << "------------------------------" << endl;
     };
 };
 
 int main() {
+
+    Biblioteca biblioteca;
+    int opcao;
+	
+    while (true) {
+        biblioteca.menu();
+        cout << "Digite a opção desejada: ";
+        cin >> opcao;
+
+        switch (opcao) {
+            case 0:
+                cout << "Saindo..." << endl;
+                return 0;
+
+            case 1:
+                cout << "opção 1" << endl;
+                break;
+
+            case 2:
+                cout << "opção 2" << endl;
+                break;
+
+            case 3:
+                cout << "opção 3" << endl;
+                break;
+
+            case 4:
+                cout << "opção 4" << endl;
+                break;
+
+            case 5:
+                cout << "opção 5" << endl;
+                break;
+
+            case 6:
+                cout << "opção 6" << endl;
+                break;
+
+            default:
+                cout << "Opção inválida!" << endl;
+                break;
+        }
+    }
 	
     return 0;
 }
-
-
