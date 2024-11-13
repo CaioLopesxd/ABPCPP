@@ -173,6 +173,9 @@ int main() {
     Biblioteca biblioteca;
     int opcao;
 	
+Biblioteca biblioteca;
+    int opcao;
+	
     while (true) {
         biblioteca.menu();
         cout << "Digite a opção desejada: ";
