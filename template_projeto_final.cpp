@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -73,10 +74,12 @@ public:
     Usuario(int id, string nome, int limiteEmprestimos) : id(id), nome(nome), limiteEmprestimos(limiteEmprestimos), emprestimosAtuais(0) {};
         
     virtual void exibirUsuario(){
-        cout << "ID: " << id << endl;
-        cout << "Nome: " << nome << endl;
+        cout << "------------------------------" << endl;
+
+        cout << "ID:                    " << id << endl;
+        cout << "Nome:                  " << nome << endl;
         cout << "Limite de Emprestimos: " << limiteEmprestimos << endl;
-        cout << "Emprestimos Atuais: " << emprestimosAtuais << endl;
+        cout << "Emprestimos Atuais:    " << emprestimosAtuais << endl;
     };
 
     bool podeEmprestar(){
@@ -180,13 +183,16 @@ public:
 
 int main() {
 
+    int count = 5;
+    int opcao;
+    string titulo, autor, genero;
+    int ano;
+
     Biblioteca biblioteca;
     biblioteca.adicionarLivro(1, "O Senhor dos Anéis", 1954, "J.R.R. Tolkien", "Fantasia");
     biblioteca.adicionarLivro(2, "Harry Potter", 1997, "J.K. Rowling", "Fantasia");
     biblioteca.adicionarLivro(3, "O Pequeno Príncipe", 1943, "Antoine de Saint-Exupéry", "Infantil");
     biblioteca.adicionarLivro(4, "Dom Quixote", 1605, "Miguel de Cervantes", "Aventura");
-
-    int opcao;
 	
     while (true) {
         biblioteca.menu();
@@ -194,12 +200,30 @@ int main() {
         cin >> opcao;
 
         switch (opcao) {
+
             case 0:
                 cout << "Saindo..." << endl;
                 return 0;
+                break;
 
             case 1:
-                cout << "opção 1" << endl;
+
+                cout << "-=- Adicionar Livro -=-" << endl;
+
+                cout << "Digite o Titulo do Livro: ";
+                cin >> titulo;
+                
+                cout << "Digite o ano de lançamento do Livro: ";
+                cin >> ano;
+
+                cout << "Digite o Nome do Autor: ";
+                cin >> autor;
+
+                cout << "Digite o genero do Livro: ";
+                cin >> genero;
+
+                biblioteca.adicionarLivro(count, titulo, ano, autor, genero);
+                count++;
                 break;
 
             case 2:
