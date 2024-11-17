@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <string>
+#include <string> 
 
 using namespace std;
 
@@ -90,12 +90,20 @@ public:
     };
     void realizarEmprestimo(){
         if(podeEmprestar()){
-            
+            emprestimosAtuais++;
+            cout << "Emprestimo realizado com sucesso!" << endl;
         }else{
             cout << "Usuario atingiu o limite de emprestimos" << endl;
         }
     };
-    void realizarDevolucao(){};
+    void realizarDevolucao(){
+        if(emprestimosAtuais > 0){
+            emprestimosAtuais--;
+            cout << "Devolucao realizada com sucesso!" << endl;
+        }else{
+            cout << "Nenhum emprestimo para devolver!" << endl;
+        }
+    };
     int getId(){
         return id;
     };
@@ -103,12 +111,16 @@ public:
 
 class Aluno : public Usuario {
 public:
-    Aluno(int id, string nome) : Usuario(id, nome, 3) {};
+    Aluno(int id, string nome) : Usuario(id, nome, 3) {
+        cout << "Aluno cadastrado com sucesso!" << endl;
+    };
 };
 
 class Professor : public Usuario {
 public:
-    Professor(int id, string nome) : Usuario(id, nome, 5) {};
+    Professor(int id, string nome) : Usuario(id, nome, 5) {
+        cout << "Professor cadastrado com sucesso!" << endl;
+    };
 };
 
 class Biblioteca {
@@ -152,20 +164,39 @@ public:
 
     void emprestarLivro(int idLivro, int idUsuario,char tipo){
         if(tipo == 'A'){
-            alunos[idUsuario].realizarEmprestimo();
+            for(auto aluno : alunos){
+                if(aluno.getId() == idUsuario){
+                    aluno.realizarEmprestimo();
+                    livros[idLivro].emprestar();
+                }
+            }
         }else if(tipo == 'P'){
-            professores[idUsuario].realizarEmprestimo();
+            for(auto professor : professores){
+                if(professor.getId() == idUsuario){
+                    professor.realizarEmprestimo();
+                    livros[idLivro].emprestar();
+                }
+            }
         }
-        livros[idLivro].emprestar();
     };
 
     void devolverLivro(int idLivro, int idUsuario,char tipo){
-        if(tipo == 'A'){
-            alunos[idUsuario].realizarDevolucao();
+       if(tipo == 'A'){
+            for(auto aluno : alunos){
+                if(aluno.getId() == idUsuario){
+                    aluno.realizarDevolucao();
+                    livros[idLivro].devolver();
+        
+                }
+            }
         }else if(tipo == 'P'){
-            professores[idUsuario].realizarDevolucao();
+            for(auto professor : professores){
+                if(professor.getId() == idUsuario){
+                    professor.realizarDevolucao();
+                    livros[idLivro].devolver();
+                }
+            }
         }
-        livros[idLivro].devolver();
     };
 
     void menu(){
@@ -183,10 +214,14 @@ public:
 
 int main() {
 
-    int count = 5;
+    int idLivro = 5;
     int opcao;
     string titulo, autor, genero;
     int ano;
+    string nome;
+    char tipo;
+    int idUsuario = 1;
+    
 
     Biblioteca biblioteca;
     biblioteca.adicionarLivro(1, "O Senhor dos Anéis", 1954, "J.R.R. Tolkien", "Fantasia");
@@ -207,7 +242,6 @@ int main() {
                 break;
 
             case 1:
-
                 cout << "-=- Adicionar Livro -=-" << endl;
 
                 cout << "Digite o Titulo do Livro: ";
@@ -222,8 +256,8 @@ int main() {
                 cout << "Digite o genero do Livro: ";
                 cin >> genero;
 
-                biblioteca.adicionarLivro(count, titulo, ano, autor, genero);
-                count++;
+                biblioteca.adicionarLivro(idLivro, titulo, ano, autor, genero);
+                idLivro++;
                 break;
 
             case 2:
@@ -232,21 +266,40 @@ int main() {
                 break;
 
             case 3:
-                cout << "opção 3" << endl;
+                cout << "-=- Adicionar Usuario -=-" << endl;
+                cout << "Digite o Nome do Usuario: ";
+                cin >> nome;
+                cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
+                cin >> tipo;
+                biblioteca.adicionarUsuario(tipo, idUsuario, nome);
+                idUsuario++;
                 break;
-
             case 4:
-                cout << "opção 4" << endl;
+                cout << "-=- Listagem de Usuarios -=-" << endl;
+                biblioteca.listarUsuarios();
                 break;
 
             case 5:
-                cout << "opção 5" << endl;
+                cout << "-=- Emprestar Livro -=-" << endl;
+                cout << "Digite o ID do Livro: ";
+                cin >> idLivro;
+                cout << "Digite o ID do Usuario: ";
+                cin >> idUsuario;
+                cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
+                cin >> tipo;
+                biblioteca.emprestarLivro(idLivro, idUsuario, tipo);
                 break;
 
             case 6:
-                cout << "opção 6" << endl;
+                cout << "-=- Devolver Livro -=-" << endl;
+                cout << "Digite o ID do Livro: ";
+                cin >> idLivro;
+                cout << "Digite o ID do Usuario: ";
+                cin >> idUsuario;
+                cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
+                cin >> tipo;
+                biblioteca.devolverLivro(idLivro, idUsuario, tipo);
                 break;
-
             default:
                 cout << "Opção inválida!" << endl;
                 break;
