@@ -30,17 +30,21 @@ public:
     };
     void emprestar(){
         if(emprestado){
+            cout << "------------------------------" << endl;
             cout << "Item ja emprestado" << endl;
         }else{
-            cout << "Item" << titulo << "emprestado" << endl;
+            cout << "------------------------------" << endl;
+            cout << "Item " << titulo << " emprestado" << endl;
             emprestado = true;
         }
     };
     void devolver(){
         if(emprestado){
-            cout << "Item" << titulo << "devolvido" << endl;
+            cout << "------------------------------" << endl;
+            cout << "Item " << titulo << " devolvido" << endl;
             emprestado = false;
         }else{
+            cout << "------------------------------" << endl;
             cout << "Item ja devolvido" << endl;
         }
     };
@@ -99,8 +103,11 @@ public:
     void realizarDevolucao(){
         if(emprestimosAtuais > 0){
             emprestimosAtuais--;
+            cout << "------------------------------" << endl;
             cout << "Devolucao realizada com sucesso!" << endl;
+            return;
         }else{
+            cout << "------------------------------" << endl;
             cout << "Nenhum emprestimo para devolver!" << endl;
         }
     };
@@ -112,6 +119,7 @@ public:
 class Aluno : public Usuario {
 public:
     Aluno(int id, string nome) : Usuario(id, nome, 3) {
+        cout << "------------------------------" << endl;
         cout << "Aluno cadastrado com sucesso!" << endl;
     };
 };
@@ -119,6 +127,7 @@ public:
 class Professor : public Usuario {
 public:
     Professor(int id, string nome) : Usuario(id, nome, 5) {
+        cout << "------------------------------" << endl;
         cout << "Professor cadastrado com sucesso!" << endl;
     };
 };
@@ -154,9 +163,13 @@ public:
     };
 
     void listarUsuarios(){
+        cout << "------------------------------" << endl;
+        cout << "            Alunos            " << endl;
         for(auto aluno : alunos){
             aluno.exibirUsuario();
         }
+        cout << "------------------------------" << endl;
+        cout << "          Professores         " << endl;
         for(auto professor : professores){
             professor.exibirUsuario();
         }
