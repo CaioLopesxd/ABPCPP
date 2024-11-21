@@ -30,9 +30,11 @@ public:
     };
     void emprestar(){
         if(emprestado){
+            cout << "5";
             cout << "------------------------------" << endl;
             cout << "Item ja emprestado" << endl;
         }else{
+            cout << "6";
             cout << "------------------------------" << endl;
             cout << "Item " << titulo << " emprestado" << endl;
             emprestado = true;
@@ -87,22 +89,28 @@ public:
     };
 
     bool podeEmprestar(){
-        if(emprestimosAtuais < limiteEmprestimos){
+        if(emprestimosAtuais -1 <= limiteEmprestimos){
             return true;
         }
         return false;
     };
     void realizarEmprestimo(){
         if(podeEmprestar()){
+            cout << "3";
             emprestimosAtuais++;
+            cout << "------------------------------" << endl;
             cout << "Emprestimo realizado com sucesso!" << endl;
+            limiteEmprestimos--;
         }else{
+            cout << "4";
+            cout << "------------------------------" << endl;
             cout << "Usuario atingiu o limite de emprestimos" << endl;
         }
     };
     void realizarDevolucao(){
         if(emprestimosAtuais > 0){
             emprestimosAtuais--;
+            limiteEmprestimos++;
             cout << "------------------------------" << endl;
             cout << "Devolucao realizada com sucesso!" << endl;
             return;
@@ -176,18 +184,50 @@ public:
     };
 
     void emprestarLivro(int idLivro, int idUsuario,char tipo){
+        if (idLivro <= 0) {
+            cout << "Livro não encontrado!" << endl;
+            return;
+        }
+
+        cout << "1";
         if(tipo == 'A'){
-            for(auto aluno : alunos){
-                if(aluno.getId() == idUsuario){
+            cout << "2";
+            for (auto& aluno : alunos) {
+                    if (aluno.getId() == idUsuario) {
+                        if (livros[idLivro - 1].isEmprestado()) {
+                        cout << "------------------------------" << endl;
+                        cout << "O livro já está emprestado!" << endl;
+                        return;
+                    }
+                    if (!aluno.podeEmprestar()) {
+                        cout << "------------------------------" << endl;
+                        cout << "Usuário atingiu o limite de empréstimos!" << endl;
+                        return;
+                    }
+
+                    livros[idLivro - 1].emprestar();
                     aluno.realizarEmprestimo();
-                    livros[idLivro].emprestar();
+                    return;
                 }
             }
         }else if(tipo == 'P'){
-            for(auto professor : professores){
-                if(professor.getId() == idUsuario){
+            cout << "3";
+            for (auto& professor : professores) {
+                if (professor.getId() == idUsuario) {
+                    if (livros[idLivro - 1].isEmprestado()) {
+                        cout << "------------------------------" << endl;
+                        cout << "O livro já está emprestado!" << endl;
+                        return;
+                    }
+                    if (!professor.podeEmprestar()) {
+                        cout << "------------------------------" << endl;
+                        cout << "Usuário atingiu o limite de empréstimos!" << endl;
+                        return;
+                    }
+
+                    livros[idLivro - 1].emprestar();
                     professor.realizarEmprestimo();
-                    livros[idLivro].emprestar();
+                    return;
                 }
             }
         }
@@ -214,6 +254,8 @@ public:
 
     void menu(){
         cout << "------------------------------" << endl;
+        cout << "             Meunu            " << endl;
+        cout << "------------------------------" << endl;
         cout << "1 - Adicionar Livro" << endl;
         cout << "2 - Listar Livros" << endl;
         cout << "3 - Adicionar Usuario" << endl;
@@ -233,7 +275,7 @@ int main() {
     int ano;
     string nome;
     char tipo;
-    int idUsuario = 1;
+    int idUsuario = 6;
     
 
     Biblioteca biblioteca;
@@ -241,6 +283,11 @@ int main() {
     biblioteca.adicionarLivro(2, "Harry Potter", 1997, "J.K. Rowling", "Fantasia");
     biblioteca.adicionarLivro(3, "O Pequeno Príncipe", 1943, "Antoine de Saint-Exupéry", "Infantil");
     biblioteca.adicionarLivro(4, "Dom Quixote", 1605, "Miguel de Cervantes", "Aventura");
+    biblioteca.adicionarUsuario('P', 1,"Caio Lopes");
+    biblioteca.adicionarUsuario('A', 2,"Gustavo");
+    biblioteca.adicionarUsuario('A', 3,"Calebe");
+    biblioteca.adicionarUsuario('P', 4,"Artur");
+    biblioteca.adicionarUsuario('A', 5,"Jhoni");
 	
     while (true) {
         biblioteca.menu();
