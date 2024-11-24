@@ -35,11 +35,9 @@ public:
     };
     void emprestar(){
         if(emprestado){
-            cout << "5";
             cout << "------------------------------" << endl;
             cout << "Item ja emprestado" << endl;
         }else{
-            cout << "6";
             cout << "------------------------------" << endl;
             cout << "Item " << titulo << " emprestado" << endl;
             emprestado = true;
@@ -101,13 +99,11 @@ public:
     };
     void realizarEmprestimo(){
         if(podeEmprestar()){
-            cout << "3";
             emprestimosAtuais++;
             cout << "------------------------------" << endl;
             cout << "Emprestimo realizado com sucesso!" << endl;
             limiteEmprestimos--;
         }else{
-            cout << "4";
             cout << "------------------------------" << endl;
             cout << "Usuario atingiu o limite de emprestimos" << endl;
         }
@@ -330,7 +326,6 @@ int main() {
                 break;
 
             case 1:
-            system("cls");
                 cout << "-=- Adicionar Livro -=-" << endl;
 
                 cout << "Digite o Titulo do Livro: ";
@@ -350,13 +345,11 @@ int main() {
                 break;
 
             case 2:
-            system("cls");
                 cout << "-=- Listagem de Livros -=-" << endl;
                 biblioteca.listarLivros();
                 break;
 
             case 3:
-            system("cls");
                 cout << "-=- Adicionar Usuario -=-" << endl;
                 cout << "Digite o Nome do Usuario: ";
                 cin >> nome;
@@ -366,13 +359,11 @@ int main() {
                 idUsuario++;
                 break;
             case 4:
-            system("cls");
                 cout << "-=- Listagem de Usuarios -=-" << endl;
                 biblioteca.listarUsuarios();
                 break;
 
             case 5:
-            system("cls");
                 cout << "-=- Emprestar Livro -=-" << endl;
                 cout << "Digite o ID do Livro: ";
                 cin >> idLivro;
@@ -382,7 +373,6 @@ int main() {
                 break;
 
             case 6:
-                system("cls");
                 cout << "-=- Devolver Livro -=-" << endl;
                 cout << "Digite o ID do Livro: ";
                 cin >> idLivro;
