@@ -17,7 +17,12 @@ public:
         cout << "ID: " << id << endl;
         cout << "Titulo: " << titulo << endl;
         cout << "Ano: " << ano << endl;
-        cout << "Emprestado: " << emprestado << endl;
+        cout << "Emprestado: ";
+        if(emprestado){ 
+            cout << "Sim" << endl;
+        }else{
+            cout << "Não" << endl;
+        }
     };
     int getId(){
         return id;
@@ -183,73 +188,96 @@ public:
         }
     };
 
-    void emprestarLivro(int idLivro, int idUsuario,char tipo){
+    void emprestarLivro(int idLivro, int idUsuario){
         if (idLivro <= 0) {
             cout << "Livro não encontrado!" << endl;
             return;
         }
 
-        cout << "1";
-        if(tipo == 'A'){
-            cout << "2";
-            for (auto& aluno : alunos) {
-                    if (aluno.getId() == idUsuario) {
-                        if (livros[idLivro - 1].isEmprestado()) {
-                        cout << "------------------------------" << endl;
-                        cout << "O livro já está emprestado!" << endl;
-                        return;
-                    }
-                    if (!aluno.podeEmprestar()) {
-                        cout << "------------------------------" << endl;
-                        cout << "Usuário atingiu o limite de empréstimos!" << endl;
-                        return;
-                    }
+        if (idUsuario <= 0) {
+            cout << "Usuario não encontrado!" << endl;
+            return;
+        }
 
-                    livros[idLivro - 1].emprestar();
-                    aluno.realizarEmprestimo();
-                    return;
-                }
-            }
-        }else if(tipo == 'P'){
-            cout << "3";
-            for (auto& professor : professores) {
-                if (professor.getId() == idUsuario) {
-                    if (livros[idLivro - 1].isEmprestado()) {
-                        cout << "------------------------------" << endl;
-                        cout << "O livro já está emprestado!" << endl;
-                        return;
-                    }
-                    if (!professor.podeEmprestar()) {
-                        cout << "------------------------------" << endl;
-                        cout << "Usuário atingiu o limite de empréstimos!" << endl;
-                        return;
-                    }
-
-                    livros[idLivro - 1].emprestar();
-                    professor.realizarEmprestimo();
+        for(auto livro : livros){
+            if(livro.getId() == idLivro){
+                if(livro.isEmprestado()){
+                    cout << "------------------------------" << endl;
+                    cout << "      Livro ja emprestado      " << endl;
                     return;
                 }
             }
         }
+
+        for(auto aluno : alunos){
+            for (auto livro : livros){
+                if(aluno.getId() == idUsuario){
+                    aluno.realizarEmprestimo();
+                    livros[idLivro - 1].emprestar();
+                    cout << "--------------------------------" << endl;
+                    cout << "Emprestimo realizado com sucesso!" << endl;
+                    return;
+                }
+            }
+        }
+        for(auto professor : professores){
+            for (auto livro : livros){
+                if(professor.getId() == idUsuario){
+                    professor.realizarEmprestimo();
+                    livros[idLivro - 1].emprestar();
+                    cout << "--------------------------------" << endl;
+                    cout << "Emprestimo realizado com sucesso!" << endl;
+                    return;
+                }
+            }
+        }
+    
     };
 
-    void devolverLivro(int idLivro, int idUsuario,char tipo){
-       if(tipo == 'A'){
-            for(auto aluno : alunos){
-                if(aluno.getId() == idUsuario){
-                    aluno.realizarDevolucao();
-                    livros[idLivro].devolver();
-        
-                }
-            }
-        }else if(tipo == 'P'){
-            for(auto professor : professores){
-                if(professor.getId() == idUsuario){
-                    professor.realizarDevolucao();
-                    livros[idLivro].devolver();
+    void devolverLivro(int idLivro, int idUsuario){
+        if (idLivro <= 0) {
+            cout << "Livro não encontrado!" << endl;
+            return;
+        }
+
+        if (idUsuario <= 0) {
+            cout << "Usuario não encontrado!" << endl;
+            return;
+        }
+
+        for(auto livro : livros){
+            if(livro.getId() == idLivro){
+                if(!livro.isEmprestado()){
+                    cout << "      Livro ja Devolvido      " << endl;
+                    cout << "------------------------------" << endl;
+                    return;
                 }
             }
         }
+
+        for(auto aluno : alunos){
+            for (auto livro : livros){
+                if(aluno.getId() == idUsuario){
+                    aluno.realizarDevolucao();
+                    livros[idLivro - 1].devolver();
+                    cout << "        Livro Devolvido       " << endl;
+                    cout << "------------------------------" << endl;
+                    return;
+                }
+            }
+        }
+        for(auto professor : professores){
+            for (auto livro : livros){
+                if(professor.getId() == idUsuario){
+                    professor.realizarDevolucao();
+                    livros[idLivro - 1].devolver();
+                    cout << "        Livro Devolvido       " << endl;
+                    cout << "------------------------------" << endl;
+                    return;
+                }
+            }
+        }
+       
     };
 
     void menu(){
@@ -302,6 +330,7 @@ int main() {
                 break;
 
             case 1:
+            system("cls");
                 cout << "-=- Adicionar Livro -=-" << endl;
 
                 cout << "Digite o Titulo do Livro: ";
@@ -321,11 +350,13 @@ int main() {
                 break;
 
             case 2:
+            system("cls");
                 cout << "-=- Listagem de Livros -=-" << endl;
                 biblioteca.listarLivros();
                 break;
 
             case 3:
+            system("cls");
                 cout << "-=- Adicionar Usuario -=-" << endl;
                 cout << "Digite o Nome do Usuario: ";
                 cin >> nome;
@@ -335,30 +366,29 @@ int main() {
                 idUsuario++;
                 break;
             case 4:
+            system("cls");
                 cout << "-=- Listagem de Usuarios -=-" << endl;
                 biblioteca.listarUsuarios();
                 break;
 
             case 5:
+            system("cls");
                 cout << "-=- Emprestar Livro -=-" << endl;
                 cout << "Digite o ID do Livro: ";
                 cin >> idLivro;
                 cout << "Digite o ID do Usuario: ";
                 cin >> idUsuario;
-                cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
-                cin >> tipo;
-                biblioteca.emprestarLivro(idLivro, idUsuario, tipo);
+                biblioteca.emprestarLivro(idLivro, idUsuario);
                 break;
 
             case 6:
+                system("cls");
                 cout << "-=- Devolver Livro -=-" << endl;
                 cout << "Digite o ID do Livro: ";
                 cin >> idLivro;
                 cout << "Digite o ID do Usuario: ";
                 cin >> idUsuario;
-                cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
-                cin >> tipo;
-                biblioteca.devolverLivro(idLivro, idUsuario, tipo);
+                biblioteca.devolverLivro(idLivro, idUsuario);
                 break;
             default:
                 cout << "Opção inválida!" << endl;
