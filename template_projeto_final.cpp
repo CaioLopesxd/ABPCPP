@@ -64,13 +64,17 @@ public:
     Livro(int id, string titulo, int ano, string autor, string genero) : ItemBiblioteca(id, titulo, ano), autor(autor), genero(genero) {};      
     void exibirDetalhes() override{
         cout << "------------------------------" << endl;
-
         cout << "ID:         " << id << endl;
         cout << "Titulo:     " << titulo << endl;
         cout << "Ano:        " << ano << endl;
         cout << "Autor:      " << autor << endl;
         cout << "Genero:     " << genero << endl;
-        cout << "Emprestado: " << emprestado << endl;
+        cout << "Emprestado: ";
+        if(emprestado){ 
+            cout << "Sim" << endl;
+        }else{
+            cout << "Não" << endl;
+        }
     };
 };
 
@@ -80,11 +84,10 @@ protected:
     string nome;
 
 public:
-    Usuario(int id, string nome, int limiteEmprestimos) : id(id), nome(nome), limiteEmprestimos(limiteEmprestimos), emprestimosAtuais(0) {};
-        
+    Usuario(int id, string nome, int limiteEmprestimos) : id(id), limiteEmprestimos(limiteEmprestimos), emprestimosAtuais(0), nome(nome) {};
+    
     virtual void exibirUsuario(){
         cout << "------------------------------" << endl;
-
         cout << "ID:                    " << id << endl;
         cout << "Nome:                  " << nome << endl;
         cout << "Limite de Emprestimos: " << limiteEmprestimos << endl;
@@ -92,7 +95,7 @@ public:
     };
 
     bool podeEmprestar(){
-        if(emprestimosAtuais -1 <= limiteEmprestimos){
+        if(emprestimosAtuais < limiteEmprestimos){
             return true;
         }
         return false;
@@ -100,12 +103,12 @@ public:
     void realizarEmprestimo(){
         if(podeEmprestar()){
             emprestimosAtuais++;
+            limiteEmprestimos--;
             cout << "------------------------------" << endl;
             cout << "Emprestimo realizado com sucesso!" << endl;
-            limiteEmprestimos--;
         }else{
             cout << "------------------------------" << endl;
-            cout << "Usuario atingiu o limite de emprestimos" << endl;
+            cout << "Limite de emprestimos atingido!" << endl;
         }
     };
     void realizarDevolucao(){
@@ -114,7 +117,6 @@ public:
             limiteEmprestimos++;
             cout << "------------------------------" << endl;
             cout << "Devolucao realizada com sucesso!" << endl;
-            return;
         }else{
             cout << "------------------------------" << endl;
             cout << "Nenhum emprestimo para devolver!" << endl;
@@ -205,27 +207,23 @@ public:
             }
         }
 
-        for(auto aluno : alunos){
-            for (auto livro : livros){
+        for(auto& aluno : alunos){
                 if(aluno.getId() == idUsuario){
                     aluno.realizarEmprestimo();
                     livros[idLivro - 1].emprestar();
                     cout << "--------------------------------" << endl;
                     cout << "Emprestimo realizado com sucesso!" << endl;
-                    return;
+                    break;
                 }
-            }
         }
-        for(auto professor : professores){
-            for (auto livro : livros){
+        for(auto& professor : professores){
                 if(professor.getId() == idUsuario){
                     professor.realizarEmprestimo();
                     livros[idLivro - 1].emprestar();
                     cout << "--------------------------------" << endl;
                     cout << "Emprestimo realizado com sucesso!" << endl;
-                    return;
+                    break;
                 }
-            }
         }
     
     };
@@ -251,8 +249,7 @@ public:
             }
         }
 
-        for(auto aluno : alunos){
-            for (auto livro : livros){
+        for(auto& aluno : alunos){
                 if(aluno.getId() == idUsuario){
                     aluno.realizarDevolucao();
                     livros[idLivro - 1].devolver();
@@ -260,10 +257,8 @@ public:
                     cout << "------------------------------" << endl;
                     return;
                 }
-            }
         }
-        for(auto professor : professores){
-            for (auto livro : livros){
+        for(auto& professor : professores){
                 if(professor.getId() == idUsuario){
                     professor.realizarDevolucao();
                     livros[idLivro - 1].devolver();
@@ -271,9 +266,7 @@ public:
                     cout << "------------------------------" << endl;
                     return;
                 }
-            }
         }
-       
     };
 
     void menu(){
@@ -299,7 +292,7 @@ int main() {
     int ano;
     string nome;
     char tipo;
-    int idUsuario = 6;
+    int idUsuario = 5;
     
 
     Biblioteca biblioteca;
@@ -307,11 +300,11 @@ int main() {
     biblioteca.adicionarLivro(2, "Harry Potter", 1997, "J.K. Rowling", "Fantasia");
     biblioteca.adicionarLivro(3, "O Pequeno Príncipe", 1943, "Antoine de Saint-Exupéry", "Infantil");
     biblioteca.adicionarLivro(4, "Dom Quixote", 1605, "Miguel de Cervantes", "Aventura");
-    biblioteca.adicionarUsuario('P', 1,"Caio Lopes");
-    biblioteca.adicionarUsuario('A', 2,"Gustavo");
-    biblioteca.adicionarUsuario('A', 3,"Calebe");
-    biblioteca.adicionarUsuario('P', 4,"Artur");
-    biblioteca.adicionarUsuario('A', 5,"Jhoni");
+    biblioteca.adicionarUsuario('A', 1, "João");
+    biblioteca.adicionarUsuario('A', 2, "Maria");
+    biblioteca.adicionarUsuario('P', 3, "José");
+    biblioteca.adicionarUsuario('P', 4, "Ana");
+
 	
     while (true) {
         biblioteca.menu();
@@ -355,7 +348,8 @@ int main() {
                 cin >> nome;
                 cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
                 cin >> tipo;
-                biblioteca.adicionarUsuario(tipo, idUsuario, nome);
+                
+                biblioteca.adicionarUsuario(toupper(tipo), idUsuario, nome);
                 idUsuario++;
                 break;
             case 4:
