@@ -95,7 +95,7 @@ public:
     };
 
     bool podeEmprestar(){
-        if(emprestimosAtuais < limiteEmprestimos){
+        if(limiteEmprestimos > 0){
             return true;
         }
         return false;
@@ -110,6 +110,7 @@ public:
             cout << "------------------------------" << endl;
             cout << "Limite de emprestimos atingido!" << endl;
         }
+        
     };
     void realizarDevolucao(){
         if(emprestimosAtuais > 0){
@@ -209,20 +210,35 @@ public:
 
         for(auto& aluno : alunos){
                 if(aluno.getId() == idUsuario){
+                    
+                    if(aluno.podeEmprestar()){
                     aluno.realizarEmprestimo();
                     livros[idLivro - 1].emprestar();
                     cout << "--------------------------------" << endl;
                     cout << "Emprestimo realizado com sucesso!" << endl;
                     break;
+                    }else{
+                        cout << "--------------------------------" << endl;
+                        cout << "Limite de emprestimos atingido!" << endl;
+                        break;
+                    }
+                    
                 }
         }
         for(auto& professor : professores){
                 if(professor.getId() == idUsuario){
-                    professor.realizarEmprestimo();
-                    livros[idLivro - 1].emprestar();
-                    cout << "--------------------------------" << endl;
-                    cout << "Emprestimo realizado com sucesso!" << endl;
+                    if(professor.podeEmprestar()){
+                        professor.realizarEmprestimo();
+                        livros[idLivro - 1].emprestar();
+                        cout << "--------------------------------" << endl;
+                        cout << "Emprestimo realizado com sucesso!" << endl;
                     break;
+                    }else{
+                        cout << "--------------------------------" << endl;
+                        cout << "Limite de emprestimos atingido!" << endl;
+                        break;
+
+                    }
                 }
         }
     
@@ -300,6 +316,9 @@ int main() {
     biblioteca.adicionarLivro(2, "Harry Potter", 1997, "J.K. Rowling", "Fantasia");
     biblioteca.adicionarLivro(3, "O Pequeno Príncipe", 1943, "Antoine de Saint-Exupéry", "Infantil");
     biblioteca.adicionarLivro(4, "Dom Quixote", 1605, "Miguel de Cervantes", "Aventura");
+    biblioteca.adicionarLivro(5, "A Arte da Guerra", 500, "Sun Tzu", "Filosofia");
+    biblioteca.adicionarLivro(6, "A Metamorfose", 1915, "Franz Kafka", "Ficção");
+    biblioteca.adicionarLivro(7, "O Processo", 1925, "Franz Kafka", "Ficção");
     biblioteca.adicionarUsuario('A', 1, "João");
     biblioteca.adicionarUsuario('A', 2, "Maria");
     biblioteca.adicionarUsuario('P', 3, "José");
