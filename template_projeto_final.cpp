@@ -9,10 +9,11 @@ protected:
     int id, ano;
     string titulo;
     bool emprestado;
+    int idUsuarioEmprestimo; // Adicionado para armazenar o ID do usuário que emprestou o livro
 
 public:
-	ItemBiblioteca(int id, string titulo, int ano) : id(id), titulo(titulo), ano(ano), emprestado(false) {};
-	
+    ItemBiblioteca(int id, string titulo, int ano) : id(id), ano(ano), titulo(titulo), emprestado(false), idUsuarioEmprestimo(-1) {};
+    
     virtual void exibirDetalhes(){
         cout << "ID: " << id << endl;
         cout << "Titulo: " << titulo << endl;
@@ -28,12 +29,9 @@ public:
         return id;
     };
     bool isEmprestado(){
-        if(!emprestado){
-            return false;
-        }
-        return true;
+        return emprestado;
     };
-    void emprestar(){
+    void emprestar(int idUsuario){
         if(emprestado){
             cout << "------------------------------" << endl;
             cout << "Item ja emprestado" << endl;
@@ -41,25 +39,30 @@ public:
             cout << "------------------------------" << endl;
             cout << "Item " << titulo << " emprestado" << endl;
             emprestado = true;
+            idUsuarioEmprestimo = idUsuario; // Armazena o ID do usuário que emprestou o livro
         }
     };
-    void devolver(){
-        if(emprestado){
+    void devolver(int idUsuario){
+        if(emprestado && idUsuarioEmprestimo == idUsuario){
             cout << "------------------------------" << endl;
             cout << "Item " << titulo << " devolvido" << endl;
             emprestado = false;
-        }else{
+            idUsuarioEmprestimo = -1; // Reseta o ID do usuário que emprestou o livro
+        }else if(!emprestado){
             cout << "------------------------------" << endl;
             cout << "Item ja devolvido" << endl;
+        }else{
+            cout << "------------------------------" << endl;
+            cout << "Erro: Este livro foi emprestado por outro usuário" << endl;
         }
     };
 };
 
 class Livro : public ItemBiblioteca {
 protected:
-	string autor;
-	string genero;
-	
+    string autor;
+    string genero;
+    
 public:
     Livro(int id, string titulo, int ano, string autor, string genero) : ItemBiblioteca(id, titulo, ano), autor(autor), genero(genero) {};      
     void exibirDetalhes() override{
@@ -95,10 +98,7 @@ public:
     };
 
     bool podeEmprestar(){
-        if(limiteEmprestimos > 0){
-            return true;
-        }
-        return false;
+        return limiteEmprestimos > 0;
     };
     void realizarEmprestimo(){
         if(podeEmprestar()){
@@ -198,7 +198,7 @@ public:
             return;
         }
 
-        for(auto livro : livros){
+        for(auto& livro : livros){
             if(livro.getId() == idLivro){
                 if(livro.isEmprestado()){
                     cout << "------------------------------" << endl;
@@ -213,7 +213,7 @@ public:
                     
                     if(aluno.podeEmprestar()){
                     aluno.realizarEmprestimo();
-                    livros[idLivro - 1].emprestar();
+                    livros[idLivro - 1].emprestar(idUsuario);
                     cout << "--------------------------------" << endl;
                     cout << "Emprestimo realizado com sucesso!" << endl;
                     break;
@@ -229,7 +229,7 @@ public:
                 if(professor.getId() == idUsuario){
                     if(professor.podeEmprestar()){
                         professor.realizarEmprestimo();
-                        livros[idLivro - 1].emprestar();
+                        livros[idLivro - 1].emprestar(idUsuario);
                         cout << "--------------------------------" << endl;
                         cout << "Emprestimo realizado com sucesso!" << endl;
                     break;
@@ -255,39 +255,25 @@ public:
             return;
         }
 
-        for(auto livro : livros){
+        for(auto& livro : livros){
             if(livro.getId() == idLivro){
                 if(!livro.isEmprestado()){
                     cout << "      Livro ja Devolvido      " << endl;
                     cout << "------------------------------" << endl;
                     return;
+                } else {
+                    livro.devolver(idUsuario);
+                    return;
                 }
             }
         }
 
-        for(auto& aluno : alunos){
-                if(aluno.getId() == idUsuario){
-                    aluno.realizarDevolucao();
-                    livros[idLivro - 1].devolver();
-                    cout << "        Livro Devolvido       " << endl;
-                    cout << "------------------------------" << endl;
-                    return;
-                }
-        }
-        for(auto& professor : professores){
-                if(professor.getId() == idUsuario){
-                    professor.realizarDevolucao();
-                    livros[idLivro - 1].devolver();
-                    cout << "        Livro Devolvido       " << endl;
-                    cout << "------------------------------" << endl;
-                    return;
-                }
-        }
+        cout << "Livro não encontrado!" << endl;
     };
 
     void menu(){
         cout << "------------------------------" << endl;
-        cout << "             Meunu            " << endl;
+        cout << "             Menu             " << endl;
         cout << "------------------------------" << endl;
         cout << "1 - Adicionar Livro" << endl;
         cout << "2 - Listar Livros" << endl;
@@ -324,7 +310,7 @@ int main() {
     biblioteca.adicionarUsuario('P', 3, "José");
     biblioteca.adicionarUsuario('P', 4, "Ana");
 
-	
+    
     while (true) {
         biblioteca.menu();
         cout << "Digite a opção desejada: ";
@@ -341,16 +327,18 @@ int main() {
                 cout << "-=- Adicionar Livro -=-" << endl;
 
                 cout << "Digite o Titulo do Livro: ";
-                cin >> titulo;
+                cin.ignore();
+                getline(cin, titulo);
                 
                 cout << "Digite o ano de lançamento do Livro: ";
                 cin >> ano;
 
-                cout << "Digite o Nome do Autor: ";
-                cin >> autor;
+                cout << "Digite o Autor do Livro: ";
+                cin.ignore();
+                getline(cin, autor);
 
                 cout << "Digite o genero do Livro: ";
-                cin >> genero;
+                getline(cin, genero);
 
                 biblioteca.adicionarLivro(idLivro, titulo, ano, autor, genero);
                 idLivro++;
@@ -364,13 +352,15 @@ int main() {
             case 3:
                 cout << "-=- Adicionar Usuario -=-" << endl;
                 cout << "Digite o Nome do Usuario: ";
-                cin >> nome;
+                cin.ignore();
+                getline(cin, nome);
                 cout << "Digite o Tipo do Usuario (A - Aluno, P - Professor): ";
                 cin >> tipo;
                 
                 biblioteca.adicionarUsuario(toupper(tipo), idUsuario, nome);
                 idUsuario++;
                 break;
+
             case 4:
                 cout << "-=- Listagem de Usuarios -=-" << endl;
                 biblioteca.listarUsuarios();
@@ -393,11 +383,12 @@ int main() {
                 cin >> idUsuario;
                 biblioteca.devolverLivro(idLivro, idUsuario);
                 break;
+
             default:
                 cout << "Opção inválida!" << endl;
                 break;
         }
     }
-	
+    
     return 0;
 }
