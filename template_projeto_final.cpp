@@ -23,7 +23,7 @@ public:
         if(emprestado){ 
             cout << "Sim" << endl;
         }else{
-            cout << "Não" << endl;
+            cout << "Nao" << endl;
         }
     };
     int getId(){
@@ -54,7 +54,7 @@ public:
             cout << "Item ja devolvido" << endl;
         }else{
             cout << "------------------------------" << endl;
-            cout << "Erro: Este livro foi emprestado por outro usuário" << endl;
+            cout << "Erro: Este livro foi emprestado por outro usuario" << endl;
         }
     };
 };
@@ -77,7 +77,7 @@ public:
         if(emprestado){ 
             cout << "Sim" << endl;
         }else{
-            cout << "Não" << endl;
+            cout << "Nao" << endl;
         }
     };
 };
@@ -114,14 +114,14 @@ public:
         
     };
     void realizarDevolucao(){
-        if(emprestimosAtuais > 0){
+       if(emprestimosAtuais > 0){
             emprestimosAtuais--;
             limiteEmprestimos++;
             cout << "------------------------------" << endl;
             cout << "Devolucao realizada com sucesso!" << endl;
         }else{
             cout << "------------------------------" << endl;
-            cout << "Nenhum emprestimo para devolver!" << endl;
+            cout << "Erro: Nao ha emprestimos para devolver!" << endl;
         }
     };
     int getId(){
@@ -190,12 +190,12 @@ public:
 
     void emprestarLivro(int idLivro, int idUsuario){
         if (idLivro <= 0) {
-            cout << "Livro não encontrado!" << endl;
+            cout << "Livro nao encontrado!" << endl;
             return;
         }
 
         if (idUsuario <= 0) {
-            cout << "Usuario não encontrado!" << endl;
+            cout << "Usuario nao encontrado!" << endl;
             return;
         }
 
@@ -247,29 +247,49 @@ public:
 
     void devolverLivro(int idLivro, int idUsuario){
         if (idLivro <= 0) {
-            cout << "Livro não encontrado!" << endl;
+            cout << "Livro nao encontrado!" << endl;
             return;
         }
 
         if (idUsuario <= 0) {
-            cout << "Usuario não encontrado!" << endl;
+            cout << "Usuario nao encontrado!" << endl;
             return;
         }
 
-        for(auto& livro : livros){
-            if(livro.getId() == idLivro){
-                if(!livro.isEmprestado()){
-                    cout << "      Livro ja Devolvido      " << endl;
+        for(auto& aluno : alunos){
+            if(aluno.getId() == idUsuario){
+                if(!livros[idLivro - 1].isEmprestado()){
                     cout << "------------------------------" << endl;
+                    cout << "      Livro ja Devolvido      " << endl;
                     return;
                 } else {
-                    livro.devolver(idUsuario);
+                    aluno.realizarDevolucao();
+                    livros[idLivro - 1].devolver(idUsuario);
+                    cout << "------------------------------" << endl;
+                    cout << "Devolucao realizada com sucesso!" << endl;
                     return;
-                }
+                }                    
             }
         }
 
-        cout << "Livro não encontrado!" << endl;
+        for(auto& professor : professores){
+            if(professor.getId() == idUsuario){
+                if(!livros[idLivro - 1].isEmprestado()){
+                    cout << "------------------------------" << endl;
+                    cout << "      Livro ja Devolvido      " << endl;
+                    return;
+                } else {
+                    professor.realizarDevolucao();
+                    livros[idLivro - 1].devolver(idUsuario);
+                    cout << "------------------------------" << endl;
+                    cout << "Devolucao realizada com sucesso!" << endl;
+                    return;
+                }                    
+            }
+        }
+        
+
+
     };
 
     void menu(){
@@ -289,7 +309,7 @@ public:
 
 int main() {
 
-    int idLivro = 5;
+    int idLivro = 11;
     int opcao;
     string titulo, autor, genero;
     int ano;
@@ -299,25 +319,25 @@ int main() {
     
 
     Biblioteca biblioteca;
-    biblioteca.adicionarLivro(1, "O Senhor dos Anéis", 1954, "J.R.R. Tolkien", "Fantasia");
+    biblioteca.adicionarLivro(1, "O Senhor dos Aneis", 1954, "J.R.R. Tolkien", "Fantasia");
     biblioteca.adicionarLivro(2, "Harry Potter", 1997, "J.K. Rowling", "Fantasia");
-    biblioteca.adicionarLivro(3, "O Pequeno Príncipe", 1943, "Antoine de Saint-Exupéry", "Infantil");
+    biblioteca.adicionarLivro(3, "O Pequeno Principe", 1943, "Antoine de Saint-Exupery", "Infantil");
     biblioteca.adicionarLivro(4, "Dom Quixote", 1605, "Miguel de Cervantes", "Aventura");
     biblioteca.adicionarLivro(5, "A Arte da Guerra", 500, "Sun Tzu", "Filosofia");
-    biblioteca.adicionarLivro(6, "A Metamorfose", 1915, "Franz Kafka", "Ficção");
-    biblioteca.adicionarLivro(7, "O Processo", 1925, "Franz Kafka", "Ficção");
-    biblioteca.adicionarLivro(8, "O Príncipe", 1532, "Nicolau Maquiavel", "Filosofia");
+    biblioteca.adicionarLivro(6, "A Metamorfose", 1915, "Franz Kafka", "Ficcao");
+    biblioteca.adicionarLivro(7, "O Processo", 1925, "Franz Kafka", "Ficcao");
+    biblioteca.adicionarLivro(8, "O Principe", 1532, "Nicolau Maquiavel", "Filosofia");
     biblioteca.adicionarLivro(9, "O Hobbit", 1937, "J.R.R. Tolkien", "Fantasia");
-    biblioteca.adicionarLivro(10, "A Divina Comédia", 1320, "Dante Alighieri", "Épico");
-    biblioteca.adicionarUsuario('A', 1, "João");
+    biblioteca.adicionarLivro(10, "A Divina Comedia", 1320, "Dante Alighieri", "epico");
+    biblioteca.adicionarUsuario('A', 1, "Joao");
     biblioteca.adicionarUsuario('A', 2, "Maria");
-    biblioteca.adicionarUsuario('P', 3, "José");
+    biblioteca.adicionarUsuario('P', 3, "Jose");
     biblioteca.adicionarUsuario('P', 4, "Ana");
-
+    system("cls");
     
     while (true) {
         biblioteca.menu();
-        cout << "Digite a opção desejada: ";
+        cout << "Digite a opcao desejada: ";
         cin >> opcao;
 
         switch (opcao) {
@@ -328,13 +348,14 @@ int main() {
                 break;
 
             case 1:
+                system("cls");
                 cout << "-=- Adicionar Livro -=-" << endl;
 
                 cout << "Digite o Titulo do Livro: ";
                 cin.ignore();
                 getline(cin, titulo);
                 
-                cout << "Digite o ano de lançamento do Livro: ";
+                cout << "Digite o ano de lancamento do Livro: ";
                 cin >> ano;
 
                 cout << "Digite o Autor do Livro: ";
@@ -354,6 +375,7 @@ int main() {
                 break;
 
             case 3:
+                system("cls");
                 cout << "-=- Adicionar Usuario -=-" << endl;
                 cout << "Digite o Nome do Usuario: ";
                 cin.ignore();
@@ -371,6 +393,7 @@ int main() {
                 break;
 
             case 5:
+                system("cls");
                 cout << "-=- Emprestar Livro -=-" << endl;
                 cout << "Digite o ID do Livro: ";
                 cin >> idLivro;
@@ -380,6 +403,7 @@ int main() {
                 break;
 
             case 6:
+                system("cls");
                 cout << "-=- Devolver Livro -=-" << endl;
                 cout << "Digite o ID do Livro: ";
                 cin >> idLivro;
@@ -389,7 +413,7 @@ int main() {
                 break;
 
             default:
-                cout << "Opção inválida!" << endl;
+                cout << "Opcao invalida!" << endl;
                 break;
         }
     }
