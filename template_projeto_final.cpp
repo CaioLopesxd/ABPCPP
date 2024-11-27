@@ -10,7 +10,7 @@ protected:
     int id, ano;
     string titulo;
     bool emprestado;
-    int idUsuarioEmprestimo; // Adicionado para armazenar o ID do usuário que emprestou o livro
+    int idUsuarioEmprestimo; 
 
 public:
     ItemBiblioteca(int id, string titulo, int ano) : id(id), ano(ano), titulo(titulo), emprestado(false), idUsuarioEmprestimo(-1) {};
@@ -40,7 +40,7 @@ public:
             cout << "------------------------------" << endl;
             cout << "Item " << titulo << " emprestado" << endl;
             emprestado = true;
-            idUsuarioEmprestimo = idUsuario; // Armazena o ID do usuário que emprestou o livro
+            idUsuarioEmprestimo = idUsuario; 
         }
     };
     void devolver(int idUsuario){
@@ -48,7 +48,7 @@ public:
             cout << "------------------------------" << endl;
             cout << "Item " << titulo << " devolvido" << endl;
             emprestado = false;
-            idUsuarioEmprestimo = -1; // Reseta o ID do usuário que emprestou o livro
+            idUsuarioEmprestimo = -1; 
         }else if(!emprestado){
             cout << "------------------------------" << endl;
             cout << "Item ja devolvido" << endl;
@@ -306,6 +306,9 @@ int main() {
     biblioteca.adicionarLivro(5, "A Arte da Guerra", 500, "Sun Tzu", "Filosofia");
     biblioteca.adicionarLivro(6, "A Metamorfose", 1915, "Franz Kafka", "Ficção");
     biblioteca.adicionarLivro(7, "O Processo", 1925, "Franz Kafka", "Ficção");
+    biblioteca.adicionarLivro(8, "O Príncipe", 1532, "Nicolau Maquiavel", "Filosofia");
+    biblioteca.adicionarLivro(9, "O Hobbit", 1937, "J.R.R. Tolkien", "Fantasia");
+    biblioteca.adicionarLivro(10, "A Divina Comédia", 1320, "Dante Alighieri", "Épico");
     biblioteca.adicionarUsuario('A', 1, "João");
     biblioteca.adicionarUsuario('A', 2, "Maria");
     biblioteca.adicionarUsuario('P', 3, "José");
